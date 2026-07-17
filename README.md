@@ -1,5 +1,7 @@
 # Bytegrad
 
+![bytegrad](assets/bytegrad.jpg)
+
 An implementation of the scalar valued type in Kotlin, that can support gradient descent based on
 [micrograd](https://github.com/karpathy/micrograd).
 
