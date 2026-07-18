@@ -78,7 +78,9 @@ internal fun useEngine(): BufferedImage {
     val e = c - d
     e.label = "e"
 
-    val result = z + e
+    val add = z + e
+    add.label = "add"
+    val result = add.tanh()
     result.label = "result"
 
     val graph = result.renderAsGraph()
