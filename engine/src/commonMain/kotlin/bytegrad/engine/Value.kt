@@ -13,10 +13,12 @@ class Value(
     internal val operator: Operator = Operator.None,
 ) {
     // The gradient
-    internal var grad: Double = 0.0
+    var grad: Double = 0.0
+        internal set
 
     // The backward pass
-    internal var backward: () -> Unit = {}
+    var backward: () -> Unit = {}
+        internal set
 
     operator fun plus(other: Value): Value {
         val output = Value(
@@ -103,6 +105,13 @@ class Value(
             grad += (1 - t.pow(2)) * output.grad
         }
         return output
+    }
+
+    fun backwardPass(gradientInit: Boolean = true) {
+        if (gradientInit) grad = 1.0
+        backward()
+        if (previous.isEmpty()) return
+        for (value in previous) value.backwardPass(gradientInit = false)
     }
 
     fun zeroGrad() {

@@ -57,9 +57,10 @@ private fun Value.operatorGraphNode(): Node {
 }
 
 private fun Value.graphNode(): Node {
+    val grad = String.format("%.4f", grad)
     val value = String.format("%.4f", data)
     val prefix = if (label.isNotBlank()) "$label |" else ""
-    val displayLabel = "$prefix $value"
+    val displayLabel = "$prefix $value | $grad"
     val node = Node.builder()
         .label(displayLabel)
         .shape(NodeShapeEnum.RECT)

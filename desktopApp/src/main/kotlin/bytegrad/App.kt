@@ -16,7 +16,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalDensity
 import bytegrad.engine.Value
 import bytegrad.engine.renderAsGraph
-import bytegrad.engine.toValue
 import org.graphper.api.FileType
 import java.awt.image.BufferedImage
 import javax.imageio.ImageIO
@@ -62,28 +61,26 @@ fun Graph() {
 }
 
 internal fun useEngine(): BufferedImage {
-    val x = Value(data = 10.0, label = "x")
-    val y = Value(data = 20.0, label = "y")
-    val k = 20.toValue()
-    k.label = "k"
-    val z = k + x
-    z.label = "z"
+    // Inputs
+    val x1 = Value(2.0, label = "x1")
+    val x2 = Value(0.0, label = "x2")
+    // Weights
+    val w1 = Value(-3.0, label = "w1")
+    val w2 = Value(1.0, label = "w2")
+    // Bias
+    val b = Value(6.881373587019543, label = "b")
+    // x1w1 + x2w2 + b
+    val x1w1 = x1 * w1; x1w1.label = "x1w1"
+    val x2w2 = x2 * w2; x1w1.label = "x2w2"
 
-    val a = Value(2.0, label = "a")
-    val b = a.exp()
-    b.label = "b"
-    val c = k * b
-    c.label = "c"
-    val d = Value(1.0, label = "d")
-    val e = c - d
-    e.label = "e"
+    val x1w1X2w2 = x1w1 + x2w2; x1w1X2w2.label = "x1w1+x2w2"
+    val n = x1w1X2w2 + b; n.label = "n"
+    val output = n.tanh(); output.label = "output"
 
-    val add = z + e
-    add.label = "add"
-    val result = add.tanh()
-    result.label = "result"
+    output.zeroGrad()
+    output.backwardPass()
 
-    val graph = result.renderAsGraph()
+    val graph = output.renderAsGraph()
     return graph.toFile(FileType.PNG).inputStream().use {
         ImageIO.read(it)
     }
