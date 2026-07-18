@@ -1,5 +1,7 @@
 package bytegrad.engine
 
+import kotlin.math.pow
+
 // An implementation of the scalar value type like in Micrograd.
 // This is my take on Andrej's famous YouTube video: https://www.youtube.com/watch?v=VMj-3S1tku0
 class Value(
@@ -29,6 +31,11 @@ class Value(
         return output
     }
 
+    operator fun minus(other: Value): Value {
+        val negation = other * Value(data = -1.0)
+        return this + negation
+    }
+
     operator fun times(other: Value): Value {
         val output = Value(
             data = data * other.data,
@@ -39,6 +46,42 @@ class Value(
             this.grad += output.grad * other.data
             other.grad += output.grad * this.data
         }
+        return output
+    }
+
+    operator fun div(other: Value): Value {
+        return this.times(other.power(value = -1.0))
+    }
+
+    fun power(value: Float) = power(value = value.toDouble())
+
+    // Forcing other to be a constant here to make the backward pass easier
+    fun power(value: Double): Value {
+        val output = Value(
+            data = data.pow(x = value),
+            previous = setOf(this),
+            operator = Operator.Power
+        )
+        output.backward = {
+            // d/dx x.pow(n) = n * x.pow(n -1)
+            this.grad += (value * data.pow(value - 1)) * output.grad
+        }
+        return output
+    }
+
+    // Math.exp()
+    fun exp(): Value {
+        val output = Value(
+            data = kotlin.math.exp(x = data),
+            previous = setOf(this),
+            operator = Operator.Exponent
+        )
+
+        output.backward = {
+            // d/dx(exp(x)) = exp(x)
+            this.grad += kotlin.math.exp(this.data) * output.grad
+        }
+
         return output
     }
 

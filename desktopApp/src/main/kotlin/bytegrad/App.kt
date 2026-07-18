@@ -64,11 +64,24 @@ fun Graph() {
 internal fun useEngine(): BufferedImage {
     val x = Value(data = 10.0, label = "x")
     val y = Value(data = 20.0, label = "y")
-    val z = 20.0.toValue() + x
+    val k = 20.toValue()
+    k.label = "k"
+    val z = k + x
     z.label = "z"
-    val a = x + y * z
-    a.label = "a"
-    val graph = a.renderAsGraph()
+
+    val a = Value(2.0, label = "a")
+    val b = a.exp()
+    b.label = "b"
+    val c = k * b
+    c.label = "c"
+    val d = Value(1.0, label = "d")
+    val e = c - d
+    e.label = "e"
+
+    val result = z + e
+    result.label = "result"
+
+    val graph = result.renderAsGraph()
     return graph.toFile(FileType.PNG).inputStream().use {
         ImageIO.read(it)
     }
