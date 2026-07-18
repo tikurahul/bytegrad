@@ -25,7 +25,7 @@ class Value(
             operator = Operator.Plus
         )
         output.backward = {
-            this.grad += 1.0 * output.grad
+            grad += 1.0 * output.grad
             other.grad += 1.0 * output.grad
         }
         return output
@@ -43,8 +43,8 @@ class Value(
             operator = Operator.Times
         )
         output.backward = {
-            this.grad += output.grad * other.data
-            other.grad += output.grad * this.data
+            grad += output.grad * other.data
+            other.grad += output.grad * data
         }
         return output
     }
@@ -64,7 +64,7 @@ class Value(
         )
         output.backward = {
             // d/dx x.pow(n) = n * x.pow(n -1)
-            this.grad += (value * data.pow(value - 1)) * output.grad
+            grad += (value * data.pow(value - 1)) * output.grad
         }
         return output
     }
@@ -79,9 +79,29 @@ class Value(
 
         output.backward = {
             // d/dx(exp(x)) = exp(x)
-            this.grad += kotlin.math.exp(this.data) * output.grad
+            grad += kotlin.math.exp(this.data) * output.grad
         }
 
+        return output
+    }
+
+    fun relu(): Value {
+        val relu = if (this.data >= 0) 1.0 else 0.0
+        val output = Value(data = relu, previous = setOf(this), operator = Operator.Relu)
+        output.backward = {
+            val m = if (data >= 0) 1.0 else 0.0
+            grad += m * output.grad
+        }
+        return output
+    }
+
+    fun tanh(): Value {
+        val x = data
+        val t = (kotlin.math.exp(2 * x) - 1) / (kotlin.math.exp(2 * x) + 1)
+        val output = Value(data = t, previous = setOf(this), operator = Operator.Tanh)
+        output.backward = {
+            grad += (1 - t.pow(2)) * output.grad
+        }
         return output
     }
 

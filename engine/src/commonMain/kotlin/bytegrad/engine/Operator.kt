@@ -7,4 +7,7 @@ enum class Operator {
     Times,              // Multiplication
     Power,              // Power
     Exponent,           // Exponent
+                        // Non-Linear Functions
+    Tanh,               // Tanh
+    Relu,               // Rectified Linear Unit
 }
