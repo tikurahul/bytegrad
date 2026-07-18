@@ -108,9 +108,11 @@ class Value(
     }
 
     fun backwardPass(gradientInit: Boolean = true) {
+        // The result node should initialize its gradient
         if (gradientInit) grad = 1.0
         backward()
         if (previous.isEmpty()) return
+        // Children only get the propagated gradients
         for (value in previous) value.backwardPass(gradientInit = false)
     }
 
