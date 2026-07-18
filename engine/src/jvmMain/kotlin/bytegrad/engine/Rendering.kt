@@ -51,7 +51,7 @@ private fun Value.operatorGraphNode(): Node {
     val node = Node.builder()
         .label(display)
         .shape(NodeShapeEnum.CIRCLE)
-        .color(Color.LIGHT_BLUE)
+        .color(Color.RED)
         .build()
     return node
 }
@@ -64,7 +64,7 @@ private fun Value.graphNode(): Node {
     val node = Node.builder()
         .label(displayLabel)
         .shape(NodeShapeEnum.RECT)
-        .color(Color.LIGHT_GREY)
+        .color(Color.BLACK)
         .build()
     return node
 }

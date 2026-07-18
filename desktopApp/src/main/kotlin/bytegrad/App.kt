@@ -73,8 +73,8 @@ internal fun useEngine(): BufferedImage {
     val x1w1 = x1 * w1; x1w1.label = "x1w1"
     val x2w2 = x2 * w2; x1w1.label = "x2w2"
 
-    val x1w1X2w2 = x1w1 + x2w2; x1w1X2w2.label = "x1w1+x2w2"
-    val n = x1w1X2w2 + b; n.label = "n"
+    val sum = x1w1 + x2w2; sum.label = "sum"
+    val n = sum + b; n.label = "n"
     val output = n.tanh(); output.label = "output"
 
     output.zeroGrad()
