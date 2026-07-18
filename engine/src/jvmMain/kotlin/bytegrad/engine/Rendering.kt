@@ -58,8 +58,8 @@ private fun Value.operatorGraphNode(): Node {
 
 private fun Value.graphNode(): Node {
     val value = String.format("%.4f", data)
-    val suffix = if (label.isNotBlank()) "/($label)" else ""
-    val displayLabel = "$value$suffix"
+    val prefix = if (label.isNotBlank()) "$label |" else ""
+    val displayLabel = "$prefix $value"
     val node = Node.builder()
         .label(displayLabel)
         .shape(NodeShapeEnum.RECT)
