@@ -5,7 +5,9 @@
 An implementation of the scalar valued type in Kotlin, that can support gradient descent based on
 [micrograd](https://github.com/karpathy/micrograd).
 
-> NOTE: This project is work-in-progress.
+> NOTE: Completed implementing the MLP (Multi Layer Perceptron). Next step: Gradient descent.
+
+![Multi Layer Perceptron](assets/mlp.svg)
 
 ## References
 

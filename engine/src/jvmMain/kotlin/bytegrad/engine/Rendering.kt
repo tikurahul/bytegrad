@@ -60,7 +60,7 @@ private fun Value.graphNode(): Node {
     val grad = String.format("grad %.4f", grad)
     val value = String.format("data %.4f", data)
     val prefix = if (label.isNotBlank()) "$label |" else ""
-    val displayLabel = "{ $prefix $value | $grad }"
+    val displayLabel = "$prefix $value | $grad"
     val node = Node.builder()
         .label(displayLabel)
         .shape(NodeShapeEnum.RECORD)

@@ -121,4 +121,9 @@ class Value(
         if (previous.isEmpty()) return
         for (value in previous) value.zeroGrad()
     }
+
+    override fun toString(): String {
+        val previous = previous.joinToString(separator = ",")
+        return "Value(data=$data, grad=$grad, operator=$operator, previous=[$previous])"
+    }
 }
