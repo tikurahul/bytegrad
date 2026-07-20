@@ -12,8 +12,7 @@ kotlin {
             implementation(libs.kotlin.test)
         }
         jvmMain.dependencies {
-            // Library that can build GraphViz like graphs
-            implementation("org.graphper:graph-support-core:1.5.2")
+            api("org.graphper:graph-support-core:1.5.2")
         }
     }
 }

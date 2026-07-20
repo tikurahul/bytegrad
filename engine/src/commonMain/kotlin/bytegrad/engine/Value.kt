@@ -9,7 +9,7 @@ class Value(
     // Labels
     var label: String = "",
     // The previous nodes if this was a result of an operation.
-    internal val previous: Set<Value> = emptySet(),
+    internal val previous: Array<Value> = emptyArray(),
     internal val operator: Operator = Operator.None,
 ) {
     // The gradient
@@ -23,7 +23,7 @@ class Value(
     operator fun plus(other: Value): Value {
         val output = Value(
             data = data + other.data,
-            previous = setOf(this, other),
+            previous = arrayOf(this, other),
             operator = Operator.Plus
         )
         output.backward = {
@@ -41,7 +41,7 @@ class Value(
     operator fun times(other: Value): Value {
         val output = Value(
             data = data * other.data,
-            previous = setOf(this, other),
+            previous = arrayOf(this, other),
             operator = Operator.Times
         )
         output.backward = {
@@ -61,7 +61,7 @@ class Value(
     fun power(value: Double): Value {
         val output = Value(
             data = data.pow(x = value),
-            previous = setOf(this),
+            previous = arrayOf(this),
             operator = Operator.Power
         )
         output.backward = {
@@ -75,7 +75,7 @@ class Value(
     fun exp(): Value {
         val output = Value(
             data = kotlin.math.exp(x = data),
-            previous = setOf(this),
+            previous = arrayOf(this),
             operator = Operator.Exponent
         )
 
@@ -89,7 +89,7 @@ class Value(
 
     fun relu(): Value {
         val relu = if (this.data >= 0) 1.0 else 0.0
-        val output = Value(data = relu, previous = setOf(this), operator = Operator.Relu)
+        val output = Value(data = relu, previous = arrayOf(this), operator = Operator.Relu)
         output.backward = {
             val m = if (data >= 0) 1.0 else 0.0
             grad += m * output.grad
@@ -100,7 +100,7 @@ class Value(
     fun tanh(): Value {
         val x = data
         val t = (kotlin.math.exp(2 * x) - 1) / (kotlin.math.exp(2 * x) + 1)
-        val output = Value(data = t, previous = setOf(this), operator = Operator.Tanh)
+        val output = Value(data = t, previous = arrayOf(this), operator = Operator.Tanh)
         output.backward = {
             grad += (1 - t.pow(2)) * output.grad
         }

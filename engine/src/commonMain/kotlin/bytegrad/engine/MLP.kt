@@ -1,7 +1,7 @@
 package bytegrad.engine
 
 /**
- * The Multi-layer perceptron.
+ * The Multi Layer Perceptron.
  */
 class MLP(inputs: Int, layerSizes: List<Int>) {
     internal val all = mutableListOf<Int>()

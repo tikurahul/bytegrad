@@ -85,7 +85,7 @@ internal fun useEngineNeuron(): BufferedImage {
 internal fun useEngineMLP(): BufferedImage {
     val size = 3
     val mlp = MLP(inputs = 3, layerSizes = listOf(4, 4, 1))
-    val values = List(size) { nextValue(from = 1.0, until = 5.0) }
+    val values = List(size) { index -> nextValue(from = 1.0, until = 5.0).also { it.label = "data-$index" } }
     val output = mlp(x = values)[0]
     output.zeroGrad()
     output.backwardPass()

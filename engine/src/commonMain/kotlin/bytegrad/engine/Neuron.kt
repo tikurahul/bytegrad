@@ -1,13 +1,15 @@
 package bytegrad.engine
 
 /**
- * Models a simple neuron.
+ * Models a simple [Neuron] as a linear combination of [weights] plus a [bias].
  */
 class Neuron(inputs: Int) {
+    private val id = nextId()
+    private val prefix = "neuron-$id"
     internal val weights: Array<Value> = Array(inputs) {
-        nextValue(from = -1.0, until = 1.0).apply { label = "w$it" }
+        nextValue(from = -1.0, until = 1.0).apply { label = "$prefix-weight-$it" }
     }
-    internal val bias = nextValue(from = -1.0, until = 1.0).apply { label = "b" }
+    internal val bias = nextValue(from = -1.0, until = 1.0).apply { label = "$prefix-bias" }
     operator fun invoke(values: List<Value>): Value {
         require(weights.size == values.size)
         // w * value + b

@@ -8,7 +8,7 @@ plugins {
 
 dependencies {
     implementation(project(":engine"))
-    implementation("org.graphper:graph-support-core:1.5.2")
+    implementation("org.slf4j:slf4j-nop:2.0.18")
     implementation(compose.desktop.currentOs)
     implementation(libs.compose.material3)
     implementation(libs.compose.ui)
