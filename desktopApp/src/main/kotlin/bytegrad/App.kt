@@ -25,7 +25,7 @@ fun Graph() {
         modifier = Modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
     ) {
-        val image = remember { useEngineMLP().toComposeImageBitmap() }
+        val image = remember { useEngineNeuron().toComposeImageBitmap() }
         val density = LocalDensity.current
         val vw = with(density) { maxWidth.toPx() }
         val vh = with(density) { maxHeight.toPx() }
@@ -93,6 +93,40 @@ internal fun useEngineMLP(): BufferedImage {
     return graph.toFile(FileType.PNG).inputStream().use {
         ImageIO.read(it)
     }
+}
+
+internal fun binaryClassification(): BufferedImage {
+    // Inputs
+    val inputs = listOf(
+        listOf(2.0, 1.0, -1.0).map { it.toValue() },
+        listOf(3.0, -1.0, 0.5).map { it.toValue() },
+        listOf(0.5, 1.0, 1.0).map { it.toValue() },
+        listOf(1.0, 1.0, -1.0).map { it.toValue() }
+    )
+    // Expected outputs
+    val outputs = listOf(1.0, -1.0, -1.0, 1.0).map { it.toValue() }
+    // Define the MLP
+    val mlp = MLP(inputs = 3, layerSizes = listOf(4, 4, 1))
+    val predictions = inputs.map { input ->
+        // The last layer has size 1
+        mlp(input).first()
+    }
+    val loss = squaredLoss(predictions = predictions, expected = outputs)
+    loss.backwardPass()
+    val graph = loss.renderAsGraph()
+    return graph.toFile(FileType.PNG).inputStream().use {
+        ImageIO.read(it)
+    }
+}
+
+private fun squaredLoss(predictions: List<Value>, expected: List<Value>): Value {
+    var loss = 0.0.toValue()
+    for (i in predictions.indices) {
+        val p = predictions[i]
+        val e = expected[i]
+        loss += (e - p).power(2.0)
+    }
+    return loss
 }
 
 internal fun useEngine(): BufferedImage {

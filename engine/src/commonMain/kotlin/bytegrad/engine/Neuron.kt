@@ -16,6 +16,13 @@ class Neuron(inputs: Int) {
     // Bias
     internal val bias = nextValue(from = -1.0, until = 1.0).apply { label = "$prefix-bias" }
 
+    // All the parameters
+    private val parameters = listOf(*weights, bias)
+
+    fun parameters(): List<Value> {
+        return parameters
+    }
+
     operator fun invoke(values: List<Value>): Value {
         require(weights.size == values.size)
         // w * value + b

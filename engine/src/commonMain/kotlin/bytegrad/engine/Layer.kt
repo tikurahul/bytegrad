@@ -4,8 +4,15 @@ package bytegrad.engine
  * Models a `layer` of [Neuron]s.
  */
 class Layer(private val inputs: Int, private val outputs: Int) {
+    private val parameters = mutableListOf<Value>()
     internal val neurons: Array<Neuron> = Array(size = outputs) {
-        Neuron(inputs = inputs)
+        val neuron = Neuron(inputs = inputs)
+        parameters += neuron.parameters()
+        neuron
+    }
+
+    fun parameters(): List<Value> {
+        return parameters
     }
 
     operator fun invoke(values: List<Value>): List<Value> {

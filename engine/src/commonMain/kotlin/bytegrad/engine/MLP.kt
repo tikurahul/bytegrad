@@ -6,6 +6,7 @@ package bytegrad.engine
 class MLP(inputs: Int, layerSizes: List<Int>) {
     internal val all = mutableListOf<Int>()
     internal val layers = mutableListOf<Layer>()
+    private val parameters = mutableListOf<Value>()
 
     init {
         // Include input layer
@@ -15,8 +16,14 @@ class MLP(inputs: Int, layerSizes: List<Int>) {
         for (i in 0 until all.size - 1) {
             val inputs = all[i]
             val next = all[i + 1]
-            layers.add(Layer(inputs = inputs, outputs = next))
+            val layer = Layer(inputs = inputs, outputs = next)
+            parameters += layer.parameters()
+            layers.add(layer)
         }
+    }
+
+    fun parameters(): List<Value> {
+        return parameters
     }
 
     operator fun invoke(x: List<Value>): List<Value> {

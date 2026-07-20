@@ -1,38 +1,10 @@
-# Bytegrad
+package bytegrad.engine
 
-![bytegrad](assets/bytegrad.jpg)
+import kotlin.test.Test
 
-An implementation of the scalar valued type in Kotlin, that can support gradient descent based on
-[micrograd](https://github.com/karpathy/micrograd).
-
-Here is an example DAG for an MLP that can be implemented as:
-
-```kotlin
-fun buildMLP(): BufferedImage {
-    val size = 3
-    val mlp = MLP(inputs = 3, layerSizes = listOf(4, 4, 1))
-    val values = List(size) { nextValue(from = 1.0, until = 5.0) }
-    val output = mlp(x = values)[0]
-    output.zeroGrad()
-    output.backwardPass()
-    val graph = output.renderAsGraph()
-    return graph.toFile(FileType.PNG).inputStream().use {
-        ImageIO.read(it)
-    }
-}
-```
-
-This is what the actual DAG looks like for the network. Make sure you look at the full-sized SVG.
-
-![Multi Layer Perceptron](assets/mlp.svg)
-
-## Training Loop
-
-This is an example training loop of a binary classifier.
-
-```kotlin
 class BinaryClassification {
-    fun main() {
+    @Test
+    fun binaryClassification() {
         // Inputs
         val inputs = listOf(
             listOf(2.0, 1.0, -1.0).map { it.toValue() },
@@ -49,8 +21,8 @@ class BinaryClassification {
             mlp(input).first()
         }
         var loss = squaredLoss(predictions = predictions, expected = outputs)
+        loss.zeroGrad()
         loss.backwardPass()
-        // Step size
         val alpha = 0.01
         var i = 0
         while (i < 1000) {
@@ -81,8 +53,3 @@ class BinaryClassification {
         return loss
     }
 }
-```
-
-## References
-
-* [The spelled-out intro to neural networks and backpropagation](https://www.youtube.com/watch?v=VMj-3S1tku0)

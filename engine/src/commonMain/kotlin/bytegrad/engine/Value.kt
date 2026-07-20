@@ -5,7 +5,7 @@ import kotlin.math.pow
 // An implementation of the scalar value type like in Micrograd.
 // This is my take on Andrej's famous YouTube video: https://www.youtube.com/watch?v=VMj-3S1tku0
 class Value(
-    val data: Double,
+    var data: Double,
     // Labels
     var label: String = "",
     // The previous nodes if this was a result of an operation.
