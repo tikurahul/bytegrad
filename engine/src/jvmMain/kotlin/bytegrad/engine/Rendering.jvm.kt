@@ -69,7 +69,6 @@ private fun Value.graphNode(): Node {
     return node
 }
 
-
 private fun Value.buildGraph(): Pair<Set<Value>, Set<Edge>> {
     val remaining = ArrayDeque<Value>()
     remaining += this
